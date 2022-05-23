@@ -12,13 +12,14 @@ users_recipes = {}
 admin = 5041295792
 last_time_message = {}
 
+
 @bot.message_handler(commands=['start'])
 def start_message(message):
     last_time_message[message.from_user.id] = int(time.time() // 1)  # антиспам защита
     # каждый раз, когда пользователь совершает действие, бот записывает текущее время и сравнивает его
     # с прошлым нажатием, если между ними прошло больше двух секунд, все хорошо, а если меньше - спам, программа просто не ответит
     users_clients[
-        message.from_user.id] = []  # дальше в три строки вместе с этой записывается айдишник пользователь НЕ НУЖНО!!!!!!
+        message.from_user.id] = []
     users_recipes[message.from_user.id] = ''
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button1 = types.KeyboardButton("Я готов(а)!🕺")
@@ -74,7 +75,7 @@ def message_reply(message):
             last_time_message[message.from_user.id] = int(time.time() // 1)
             markup_days_of_the_week.add(button_mn, button_ts, button_wd, button_th, button_fr, button_st, button_sn)
             msg = bot.send_message(message.chat.id,
-                                   'У вас дефицит массы тела😕. Вот ваш персональный рацион питания на неделю🥗🌮🌯!',
+                                   'У вас дефицит массы тела😕. Вот ваш персональный рацион питания на неделю🥗🌮🌯! Выберите текущий день недели:',
                                    reply_markup=markup_days_of_the_week)
             bot.register_next_step_handler(msg, show_deficit)
     if message.text == '18,5-25':
@@ -92,7 +93,7 @@ def message_reply(message):
             last_time_message[message.from_user.id] = int(time.time() // 1)
             markup_days_of_the_week.add(button_mn, button_ts, button_wd, button_th, button_fr, button_st, button_sn)
             msg = bot.send_message(message.chat.id,
-                                   'У вас есть лишний вес😕. Вот ваш персональный рацион питания на неделю🥗🌮🌯!',
+                                   'У вас есть лишний вес😕. Вот ваш персональный рацион питания на неделю🥗🌮🌯! Выберите текущий день недели:',
                                    reply_markup=markup_days_of_the_week)
             bot.register_next_step_handler(msg, show_excess)
     if message.text == '30-35':
@@ -102,7 +103,7 @@ def message_reply(message):
             last_time_message[message.from_user.id] = int(time.time() // 1)
             markup_days_of_the_week.add(button_mn, button_ts, button_wd, button_th, button_fr, button_st, button_sn)
             msg = bot.send_message(message.chat.id,
-                                   'К сожалению, у вас ожирение первой степени. Не расстраивайтесь, мы поможем вам с этим справиться! Вот ваш персональный рацион питания на неделю🥗🌮🌯!',
+                                   'К сожалению, у вас ожирение первой степени. Не расстраивайтесь, мы поможем вам с этим справиться! Вот ваш персональный рацион питания на неделю🥗🌮🌯! Выберите текущий день недели:',
                                    reply_markup=markup_days_of_the_week)
             bot.register_next_step_handler(msg, show_excess)
     if (message.text == '35-40') or (message.text == '>40'):
@@ -111,9 +112,7 @@ def message_reply(message):
         else:
             last_time_message[message.from_user.id] = int(time.time() // 1)
             markup_days_of_the_week.add(button_mn, button_ts, button_wd, button_th, button_fr, button_st, button_sn)
-            msg = bot.send_message(message.chat.id,
-                                   'К сожалению, у вас большой лишний вес. Но не расстраивайтесь, мы поможем вам с этим справиться! Вот ваш персональный рацион питания на неделю🥗🌮🌯!',
-                                   reply_markup=markup_days_of_the_week)
+            msg = bot.send_message(message.chat.id, 'К сожалению, у вас большой лишний вес. Но не расстраивайтесь, мы поможем вам с этим справиться! Вот ваш персональный рацион питания на неделю🥗🌮🌯! Выберите текущий день недели:', reply_markup=markup_days_of_the_week)
             bot.register_next_step_handler(msg, show_excess)
 
 
@@ -160,7 +159,8 @@ def show_excess(message):
         bot.send_message(message.chat.id, racion1('сб'), reply_markup=markup_imt_categories)
     if message.text == 'воскресенье':
         bot.send_message(message.chat.id, racion1('вс'), reply_markup=markup_imt_categories)
-        bot.send_message(message.chat.id, 'Мы верим в вас! Правильно поставленная цель уже наполовину достигнута!💪🏻🧠')
+        bot.send_message(message.chat.id,
+                         'Мы верим в вас! Правильно поставленная цель уже наполовину достигнута!💪🏻🧠')
 
 
 bot.infinity_polling()
